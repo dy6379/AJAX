@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX로 댓글 달기</title>
+    <style>
+      div.box {
+        margin: 2px;
+        border: 1px solid pink;
+        padding: 10px;
+        background-color: #e3e3e3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>댓글달기 Form</h1>
+    <form name="commentform">
+      <div>댓글 입력 :</div>
+      <textarea name="comment" style="width: 300px; height: 100px" required> </textarea>
+      <div>이메일 주소 :</div>
+      <input type="email" required /><br />
+      <br />
+      <input type="button" value="댓글 달기" onclick="sendServer()" />
+    </form>
+
+    <div id="output"></div>
+    <script>
+      const inputComment = document.querySelector('textarea'); //코멘트내용
+      const inputemail = document.querySelector('input[type="email"]'); //입력이메일
+      const output = document.getElementById('output'); //출력
+      const request = new XMLHttpRequest(); //ajax 객체 생성
+
+      function sendServer() {
+        //이메일을 jsp로 보내 중복체크
+        let comment = inputComment.value;
+        let email = inputemail.value;
+        //적은 문자열을 http로 보낼때 깨지지않도록 인코딩을 해서 보낸다
+        let url = 'comment.jsp?comment=' + encodeURI(comment) + '&email=' + email;
+        request.onreadystatechange = postComment;
+        request.open('GET', url, true);
+        request.send();
+      }
+      function postComment() {
+        //email 중복체크후 결과
+        if (request.readyState == 4 && request.status == 200) {
+          let comments = request.responseText;
+          output.innerHTML = comments; //태그와 같이 입력됨
+        }
+      }
+    </script>
+  </body>
+</html>

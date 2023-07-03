@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX연습</title>
+  </head>
+  <body>
+    <h1>아이디 입력시 DB검색해 결과출력</h1>
+    아이디 입력 : <input onkeyup="sendServer()" type="text" />
+    <div id="output"></div>
+
+    <script>
+      //버튼을 누르면 ajax로 서버주소로 http요청하기(비동기 : 백그라운드 실행됨)
+      const input = document.querySelector('input[type="text"]');
+      const output = document.getElementById('output');
+      const request = new XMLHttpRequest(); //ajax 객체 생성
+
+      function sendServer() {
+        //input태그에 아이디를 입력하면 이벤트 keyup 일때 AJAX 서버로 GET 요청 (id)
+        let id = input.value;
+        let url = 'getDB.jsp?id=' + id; //AJAX요청 주소
+        request.open('GET', url, true); //함수 getInfo()를 아래 정의
+        request.send(); //보내기
+        request.onreadystatechange = function () {
+          //id로 db 검색 결과를 받아서 출력
+          if (request.readyState == 4 && request.status == 200) {
+            let info = request.responseText; //서버에서 보내준 텍스트
+            output.textContent = info;
+          }
+        };
+      }
+    </script>
+  </body>
+</html>

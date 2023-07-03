@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX연습</title>
+  </head>
+  <body>
+    <h1>원하는 구구단의 숫자?</h1>
+    <input type="text" />
+    <button onclick="sendServer()">계산하기</button>
+    <div id="output"></div>
+
+    <script>
+      //버튼을 누르면 ajax로 서버주소로 http요청하기(비동기 : 백그라운드 실행됨)
+      const input = document.querySelector('input');
+      const output = document.getElementById('output');
+      const request = new XMLHttpRequest(); //ajax 객체 생성
+
+      function sendServer() {
+        let v = input.value; //입력창의 값
+        let url = 'gugu.jsp?val=' + v; //AJAX요청 주소
+        request.open('GET', url, true);
+        request.send(); //보내기
+        request.onreadystatechange = function () {
+          //서버에서 응답 데이터받기
+          if (request.readyState == 4 && request.status == 200) {
+            let val = request.responseText; //서버에서 보내준 텍스트(태그포함)
+            //console.log(val);
+            output.innerHTML = val;
+          }
+        };
+      }
+    </script>
+  </body>
+</html>

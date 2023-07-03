@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX로 이메일 체크</title>
+  </head>
+  <body>
+    <h1>회원 가입시 이메일 중복 체크</h1>
+    <form name="myform">
+      <input type="email" name="email" placeholder="이메일 입력" />
+      <input type="button" onclick="sendServer()" value="중복체크" />
+      <div id="output"></div>
+    </form>
+
+    <script>
+      const input = document.querySelector('input[type="email"]');
+      const output = document.getElementById('output');
+      const request = new XMLHttpRequest(); //ajax 객체 생성
+
+      //서버에 이메일을 보내서 중복체크하기
+      function sendServer() {
+        let email = input.value;
+        let url = 'emailCheck.jsp?email=' + email;
+        request.open('GET', url, true); //http방식, 주소
+        request.send(); //서버로 비동기 전송
+        request.onreadystatechange = getInfo;
+      }
+      function getInfo() {
+        //서버에서 준비가 되고 && http통신이 성공(200)
+        if (request.readyState == 4 && request.status == 200) {
+          let text = request.responseText;
+          //console.log(text);
+          output.textContent = text;
+        }
+      }
+    </script>
+  </body>
+</html>

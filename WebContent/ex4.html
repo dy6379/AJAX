@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AJAX</title>
+  </head>
+
+  <body>
+    <h1>Learn AJAX</h1>
+    <div id="output"></div>
+    <button id="loadNew">Load</button>
+
+    <script type="text/javascript">
+      const output = document.getElementById('output');
+      const buttonClick = document.getElementById('loadNew');
+      buttonClick.addEventListener('click', function () {
+        loadAjax();
+      });
+      function loadAjax() {
+        const ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function () {
+          //console.log('state changed',ajax.readyState,ajax.status)
+          if (ajax.readyState == 4 && ajax.status == 200) {
+            //console.log(ajax.responseText);
+            const json = JSON.parse(ajax.responseText);
+            const data = json.results[0];
+            console.log(data);
+            const message =
+              '<h2>' +
+              data.name.first +
+              '  ' +
+              data.name.last +
+              '</h2><img src="' +
+              data.picture.large +
+              '">';
+
+            output.innerHTML = message;
+          }
+        };
+        ajax.open('GET', 'https://randomuser.me/api/', true);
+        ajax.send();
+      }
+    </script>
+  </body>
+</html>
